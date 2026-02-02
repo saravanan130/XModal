@@ -1,77 +1,67 @@
+import logo from "./logo.svg";
 import "./App.css";
 import React, { useState } from "react";
-
 function App() {
   const [isOpen, setIsOpen] = useState(false);
+  const clickHandler = () => {
+    setIsOpen(true);
+  };
+
+  const closeHandler = (e) => {
+    console.log(e.target.className);
+    if (e.target.className === "modal-content") setIsOpen(false);
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
-
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-    const dob = document.getElementById("dob").value;
-
-    if (!email.includes("@")) {
-      alert("Invalid email");
-      return;
+    if (e.target.phoneNo.value.toString().length !== 10) {
+      alert("Invalid phone number. Please enter a 10-digit phone number.");
+    } else if (new Date(e.target.dob.value).getTime() > Date.now()) {
+      alert("Invalid date of birth. Date of birth cannot be in the future.");
+    } else {
+      e.target.username.value = "";
+      e.target.email.value = "";
+      e.target.phoneNo.value = "";
+      e.target.dob.value = "";
     }
-
-    if (phone.length !== 10) {
-      alert("Invalid phone number");
-      return;
-    }
-
-    if (dob && new Date(dob) > new Date()) {
-      alert("Invalid date of birth");
-      return;
-    }
-
-    e.target.reset();
+    console.log(e.target.dob.value);
   };
 
   return (
     <div className="App">
-      <h1>User Details Modal</h1>
-      <button onClick={() => setIsOpen(true)}>Open Form</button>
-
-      {isOpen && (
-        <div className="modal" onClick={() => setIsOpen(false)}>
-          <div
-            className="modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
+      <div className="modal">
+        <h1>User Details Modal</h1>
+        <button onClick={clickHandler}>Open Form</button>
+        {isOpen && (
+          <div className="modal-content" onClick={closeHandler}>
             <form onSubmit={submitHandler}>
               <h2>Fill Details</h2>
-
               <div className="input-group">
-                <label>Username:</label>
-                <input id="username" type="text" />
+                <label htmlFor="username">Username: </label>
+                <input type="text" name="username" id="username" />
               </div>
-
               <div className="input-group">
-                <label>Email:</label>
-                <input id="email" type="email" required />
+                <label htmlFor="email">Email Address:</label>
+                <input type="email" name="email" id="email" required />
               </div>
-
               <div className="input-group">
-                <label>Phone Number:</label>
-                <input id="phone" type="number" required />
+                <label htmlFor="phoneNo">Phone Number:</label>
+                <input type="number" name="phoneNo" id="phone" required />
               </div>
-
               <div className="input-group">
-                <label>Date of Birth:</label>
-                <input id="dob" type="date" />
+                <label htmlFor="dob">Date of Birth:</label>
+                <input type="date" name="dob" id="dob" />
               </div>
-
               <button type="submit" className="submit-button">
                 Submit
               </button>
             </form>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
 
 export default App;
+
