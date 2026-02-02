@@ -4,32 +4,38 @@ import React, { useState } from "react";
 function App() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-
   const submitHandler = (e) => {
     e.preventDefault();
 
-    const { email, phoneNo, dob } = e.target;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const dob = document.getElementById("dob").value;
 
-    if (!email.value.includes("@")) {
+    if (!email.includes("@")) {
       alert("Invalid email");
-    } else if (phoneNo.value.length !== 10) {
-      alert("Invalid phone number");
-    } else if (new Date(dob.value) > new Date()) {
-      alert("Invalid date of birth");
-    } else {
-      e.target.reset();
+      return;
     }
+
+    if (phone.length !== 10) {
+      alert("Invalid phone number");
+      return;
+    }
+
+    if (dob && new Date(dob) > new Date()) {
+      alert("Invalid date of birth");
+      return;
+    }
+
+    e.target.reset();
   };
 
   return (
     <div className="App">
       <h1>User Details Modal</h1>
-      <button onClick={openModal}>Open Form</button>
+      <button onClick={() => setIsOpen(true)}>Open Form</button>
 
       {isOpen && (
-        <div className="modal" onClick={closeModal}>
+        <div className="modal" onClick={() => setIsOpen(false)}>
           <div
             className="modal-content"
             onClick={(e) => e.stopPropagation()}
@@ -48,16 +54,18 @@ function App() {
               </div>
 
               <div className="input-group">
-                <label>Phone:</label>
+                <label>Phone Number:</label>
                 <input id="phone" type="number" required />
               </div>
 
               <div className="input-group">
-                <label>DOB:</label>
+                <label>Date of Birth:</label>
                 <input id="dob" type="date" />
               </div>
 
-              <button type="submit">Submit</button>
+              <button type="submit" className="submit-button">
+                Submit
+              </button>
             </form>
           </div>
         </div>
