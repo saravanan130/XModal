@@ -4,13 +4,20 @@ import React, { useState } from "react";
 function App() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
   const submitHandler = (e) => {
     e.preventDefault();
 
-    if (e.target.phoneNo.value.length !== 10) {
-      alert("Invalid phone number. Please enter a 10-digit phone number.");
-    } else if (new Date(e.target.dob.value).getTime() > Date.now()) {
-      alert("Invalid date of birth. Date of birth cannot be in the future.");
+    const { email, phoneNo, dob } = e.target;
+
+    if (!email.value.includes("@")) {
+      alert("Invalid email");
+    } else if (phoneNo.value.length !== 10) {
+      alert("Invalid phone number");
+    } else if (new Date(dob.value) > new Date()) {
+      alert("Invalid date of birth");
     } else {
       e.target.reset();
     }
@@ -19,15 +26,12 @@ function App() {
   return (
     <div className="App">
       <h1>User Details Modal</h1>
-      <button onClick={() => setIsOpen(true)}>Open Form</button>
+      <button onClick={openModal}>Open Form</button>
 
       {isOpen && (
-        <div
-          className="modal-overlay"
-          onClick={() => setIsOpen(false)}
-        >
+        <div className="modal" onClick={closeModal}>
           <div
-            className="modal"
+            className="modal-content"
             onClick={(e) => e.stopPropagation()}
           >
             <form onSubmit={submitHandler}>
@@ -35,27 +39,25 @@ function App() {
 
               <div className="input-group">
                 <label>Username:</label>
-                <input type="text" id="username" name="username" />
+                <input id="username" type="text" />
               </div>
 
               <div className="input-group">
-                <label>Email Address:</label>
-                <input type="email" id="email" name="email" required />
+                <label>Email:</label>
+                <input id="email" type="email" required />
               </div>
 
               <div className="input-group">
-                <label>Phone Number:</label>
-                <input type="number" id="phone" name="phoneNo" required />
+                <label>Phone:</label>
+                <input id="phone" type="number" required />
               </div>
 
               <div className="input-group">
-                <label>Date of Birth:</label>
-                <input type="date" id="dob" name="dob" />
+                <label>DOB:</label>
+                <input id="dob" type="date" />
               </div>
 
-              <button type="submit" className="submit-button">
-                Submit
-              </button>
+              <button type="submit">Submit</button>
             </form>
           </div>
         </div>
